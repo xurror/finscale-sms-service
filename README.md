@@ -1,18 +1,24 @@
-# message-gateway
+# Finsacale SMS Service 
+
+A lot has changed since last time, we upgraded the service in latest spring boot.
 
 ## Build set up
 ##### To create standalone application:
-  ./gradlew clean build 
-##### To run 
-  cd build/lib
+  `./gradlew clean build` 
+##### To bootRun 
+  `./gradlew bootRun`
   
-  java -jar message-gateway-0.0.1.jar
+##### As Jar
+  `cd build/lib`
+  
+  `java -jar message-gateway-0.0.1.jar`
 
 ##### To create deployable war:
-./gradlew clean build -Pprofile=deployable
+`./gradlew clean build -Pprofile=deployable`
 
 war file can be found in build/libs
  
+## Kubernetes 
 
 ##Steps to configure Message-Gateway
 
@@ -94,3 +100,12 @@ This API will return Bridge Identifier by which you can use while sending SMS
 		}]
 
 Note: While sending SMS, don't include country code as part of each message. This country code will be prefixed by taking value from provider details. You need configure host-address: [your public ip on which message-gateway is running] in application.yml
+
+### More services 
+
+We are adding 
+
+1. Adding Custom Service Provider
+2. TextLocal 
+3. Plivo
+4. PlaySMS

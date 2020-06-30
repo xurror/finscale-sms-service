@@ -45,12 +45,12 @@ public class TwilioMessageProvider extends SMSProvider {
     private static final Logger logger = LoggerFactory.getLogger(TwilioMessageProvider.class);
 
     private HashMap<String, TwilioRestClient> restClients = new HashMap<>() ; //tenantId, twilio clients
-    
-    
+
+
     private final String callBackUrl ;
-    
+
     private final StringBuilder builder ;
-    
+
     @Autowired
     TwilioMessageProvider(final HostConfig hostConfig) {
     	builder = new StringBuilder() ;
@@ -58,7 +58,7 @@ public class TwilioMessageProvider extends SMSProvider {
     	logger.info("Registering call back to twilio:"+callBackUrl);
     }
 
-    
+
     @Override
     public void sendMessage(final SMSBridge smsBridgeConfig, final SMSMessage message)
         throws MessageGatewayException {
@@ -88,7 +88,7 @@ public class TwilioMessageProvider extends SMSProvider {
         	message.setDeliveryErrorMessage(e.getMessage());
         }
     }
-    
+
     private TwilioRestClient getRestClient(final SMSBridge smsBridge) {
     	String authorizationKey = encodeBase64(smsBridge) ;
     	TwilioRestClient client = this.restClients.get(authorizationKey) ;
@@ -98,7 +98,7 @@ public class TwilioMessageProvider extends SMSProvider {
 		}
 	    return client ;
     }
-    
+
     TwilioRestClient get(final SMSBridge smsBridgeConfig) {
     	logger.debug("Creating a new Twilio Client ....");
     	String providerAccountId = smsBridgeConfig.getConfigValue(MessageGatewayConstants.PROVIDER_ACCOUNT_ID) ;

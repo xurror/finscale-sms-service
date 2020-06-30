@@ -50,7 +50,7 @@ public class PlaySmsApiResources {
     Optional<SMSMessage> message = this.smsOutboundMessageRepository.findById(messageId) ;
     if(message != null) {
       SMSReport report = payload.getResults().get(0) ;
-      logger.debug("Status Callback received from InfoBip for "+messageId+" with status:"+report.getStatus());
+      logger.debug("Status Callback received from PlaySMS for "+messageId+" with status:"+report.getStatus());
       message.get().setDeliveryStatus(PlaySmsStatus.smsStatus(report.getStatus().getGroupId()).getValue());
       this.smsOutboundMessageRepository.save(message.get()) ;
     }else {
