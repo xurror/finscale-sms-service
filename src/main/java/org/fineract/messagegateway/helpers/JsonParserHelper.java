@@ -36,12 +36,12 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.MonthDay;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.springframework.format.number.NumberFormatter;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import org.springframework.format.number.NumberStyleFormatter;
 
 /**
  * Helper class to extract values of json named attributes.
@@ -196,7 +196,7 @@ public class JsonParserHelper {
         }
         return value;
     }
-    
+
     public String extractTimeFormatParameter(final JsonObject element) {
         String value = null;
         if (element.isJsonObject()) {
@@ -369,7 +369,7 @@ public class JsonParserHelper {
         }
         return value;
     }
-    
+
     public LocalDateTime extractLocalTimeNamed(final String parameterName, final JsonElement element,
             final Set<String> parametersPassedInCommand) {
 
@@ -384,7 +384,7 @@ public class JsonParserHelper {
         }
         return value;
     }
-    
+
     public LocalDateTime extractLocalTimeNamed(final String parameterName, final JsonObject element, final String timeFormat,
             final Locale clientApplicationLocale, final Set<String> parametersPassedInCommand) {
         LocalDateTime value = null;
@@ -393,14 +393,14 @@ public class JsonParserHelper {
             final JsonObject object = element.getAsJsonObject();
             if (object.has(parameterName) && object.get(parameterName).isJsonPrimitive()) {
                 parametersPassedInCommand.add(parameterName);
-                
+
                 try{
                     DateTimeFormatter timeFormtter = DateTimeFormat.forPattern(timeFormat);
                     final JsonPrimitive primitive = object.get(parameterName).getAsJsonPrimitive();
                      timeValueAsString = primitive.getAsString();
                     if (StringUtils.isNotBlank(timeValueAsString)) {
                         value = LocalDateTime.parse(timeValueAsString, timeFormtter);
-                    }    
+                    }
                 }
                 catch(IllegalArgumentException e ){
                     final List<ApiParameterError> dataValidationErrors = new ArrayList<>();
@@ -412,7 +412,7 @@ public class JsonParserHelper {
                     throw new PlatformApiDataValidationException("validation.msg.validation.errors.exist", "Validation errors exist.",
                             dataValidationErrors);
                 }
-                
+
             }
         }
         return value;
@@ -611,7 +611,7 @@ public class JsonParserHelper {
                     source = source.replaceAll(" ", Character.toString('\u00a0'));
                 }
 
-                final NumberFormatter numberFormatter = new NumberFormatter();
+                final NumberStyleFormatter numberFormatter = new NumberStyleFormatter();
                 final Number parsedNumber = numberFormatter.parse(source, clientApplicationLocale);
                 if (parsedNumber instanceof BigDecimal) {
                     number = (BigDecimal) parsedNumber;

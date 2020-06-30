@@ -30,7 +30,7 @@ CREATE TABLE m_sms_bridge (
   tenant_phone_no         VARCHAR(255)                                    NOT NULL,
   provider_name           VARCHAR(100)                                    NOT NULL,
   country_code			  VARCHAR(5) 									  NOT NULL,
-  provider_key 		  	  VARCHAR(100)									  NOT NULL,			
+  provider_key 		  	  VARCHAR(100)									  NOT NULL,
   description             VARCHAR(500)                                    NOT NULL,
   created_on              TIMESTAMP                                       NULL DEFAULT NULL,
   last_modified_on        TIMESTAMP                                       NULL DEFAULT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE m_outbound_messages (
   sms_bridge_id           BIGINT(20)                                      NOT NULL,
   mobile_number           VARCHAR(255)                                    NOT NULL,
   submitted_on_date       TIMESTAMP                                       NOT NULL,
-  delivered_on_date       TIMESTAMP                                       NOT NULL,
+  delivered_on_date       TIMESTAMP                                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
   delivery_status	      INT(3)										  NOT NULL,
   message		          VARCHAR(4096)                                   NOT NULL,
   CONSTRAINT `m_outbound_messages_1` FOREIGN KEY (`sms_bridge_id`) REFERENCES `m_sms_bridge` (`id`)

@@ -34,27 +34,29 @@ import org.springframework.web.bind.annotation.RestController;
 import infobip.api.model.sms.mt.reports.SMSReport;
 import infobip.api.model.sms.mt.reports.SMSReportResponse;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/infobip")
 public class InfoBipApiResource {
 
 	private static final Logger logger = LoggerFactory.getLogger(InfoBipApiResource.class);
-	
+
 	private final SmsOutboundMessageRepository smsOutboundMessageRepository ;
-	
+
 	@Autowired
 	public InfoBipApiResource(final SmsOutboundMessageRepository smsOutboundMessageRepository) {
 		this.smsOutboundMessageRepository = smsOutboundMessageRepository ;
 	}
-	
+
 	@RequestMapping(value = "/report/{messageId}", method = RequestMethod.POST, consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<Void> updateDeliveryStatus(@PathVariable("messageId") final Long messageId, @RequestBody final SMSReportResponse payload) {
-    	SMSMessage message = this.smsOutboundMessageRepository.findOne(messageId) ;
+    	Optional<SMSMessage> message = this.smsOutboundMessageRepository.findById(messageId);
     	if(message != null) {
     		SMSReport report = payload.getResults().get(0) ;
     		logger.debug("Status Callback received from InfoBip for "+messageId+" with status:"+report.getStatus());
-    		message.setDeliveryStatus(InfoBipStatus.smsStatus(report.getStatus().getGroupId()).getValue());
-    		this.smsOutboundMessageRepository.save(message) ;
+    		message.get().setDeliveryStatus(InfoBipStatus.smsStatus(report.getStatus().getGroupId()).getValue());
+    		this.smsOutboundMessageRepository.save(message.get()) ;
     	}else {
     		logger.info("Message with Message id "+messageId+" Not found");
     	}

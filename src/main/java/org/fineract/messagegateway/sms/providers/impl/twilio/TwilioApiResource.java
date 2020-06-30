@@ -31,26 +31,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/twilio")
 public class TwilioApiResource {
 
 	private static final Logger logger = LoggerFactory.getLogger(TwilioApiResource.class);
-	
+
 	private final SmsOutboundMessageRepository smsOutboundMessageRepository ;
-	
+
 	@Autowired
 	public TwilioApiResource(final SmsOutboundMessageRepository smsOutboundMessageRepository) {
 		this.smsOutboundMessageRepository = smsOutboundMessageRepository ;
 	}
-	
+
 	@RequestMapping(value = "/report/{messageId}", method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"}, produces = {"application/x-www-form-urlencoded"})
     public ResponseEntity<Void> updateDeliveryStatus(@PathVariable("messageId") final Long messageId, @ModelAttribute final TwilioReponseData payload) {
-    	SMSMessage message = this.smsOutboundMessageRepository.findOne(messageId) ;
+    	Optional <SMSMessage> message = this.smsOutboundMessageRepository.findById(messageId) ;
     	if(message != null) {
     		logger.info("Status Callback received from Twilio for "+messageId+" with status:"+payload.getMessageStatus());
-    		message.setDeliveryStatus(TwilioStatus.smsStatus(payload.getMessageStatus()).getValue());
-    		this.smsOutboundMessageRepository.save(message) ;
+    		message.get().setDeliveryStatus(TwilioStatus.smsStatus(payload.getMessageStatus()).getValue());
+    		this.smsOutboundMessageRepository.save(message.get()) ;
     	}else {
     		logger.info("Message with Message id "+messageId+" Not found");
     	}
