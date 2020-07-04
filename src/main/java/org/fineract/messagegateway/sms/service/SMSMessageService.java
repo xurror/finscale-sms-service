@@ -18,6 +18,7 @@
  */
 package org.fineract.messagegateway.sms.service;
 
+import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -149,8 +150,12 @@ public class SMSMessageService {
 
 		@Override
 		public void run() {
-			this.smsProviderFactory.sendShortMessage(messages);
-			this.smsOutboundMessageRepository.saveAll(messages) ;
+      try {
+        this.smsProviderFactory.sendShortMessage(messages);
+      } catch (URISyntaxException e) {
+        e.printStackTrace();
+      }
+      this.smsOutboundMessageRepository.saveAll(messages) ;
 		}
 	}
 

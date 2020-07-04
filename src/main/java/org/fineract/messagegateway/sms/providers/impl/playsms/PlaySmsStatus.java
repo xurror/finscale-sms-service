@@ -39,7 +39,6 @@ public class PlaySmsStatus {
       case 5:
         smsStatus = SmsMessageStatusType.FAILED;
         break ;
-
       case 3:
         smsStatus = SmsMessageStatusType.DELIVERED;
         break ;

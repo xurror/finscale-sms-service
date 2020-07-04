@@ -18,6 +18,7 @@
  */
 package org.fineract.messagegateway.sms.providers;
 
+import java.net.URISyntaxException;
 import java.util.Base64;
 
 import org.fineract.messagegateway.constants.MessageGatewayConstants;
@@ -26,10 +27,10 @@ import org.fineract.messagegateway.sms.domain.SMSBridge;
 import org.fineract.messagegateway.sms.domain.SMSMessage;
 
 public abstract class SMSProvider {
-	
+
 	public abstract void sendMessage(final SMSBridge smsBridgeConfig, final SMSMessage message)
-	        throws MessageGatewayException ;
-	
+            throws MessageGatewayException, URISyntaxException;
+
 	protected String encodeBase64(final SMSBridge smsBridgeConfig) {
 		String tenant = smsBridgeConfig.getTenantId().toString() ;
 		String username = smsBridgeConfig.getConfigValue(MessageGatewayConstants.PROVIDER_ACCOUNT_ID) ;

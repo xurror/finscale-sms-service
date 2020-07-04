@@ -30,14 +30,14 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 @MappedSuperclass
 public abstract class AbstractPersistableCustom<PK extends Serializable> implements Persistable<PK> {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected PK id;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.springframework.data.domain.Persistable#getId()
 	 */
 	public PK getId() {
@@ -47,7 +47,7 @@ public abstract class AbstractPersistableCustom<PK extends Serializable> impleme
 
 	/**
 	 * Sets the id of the entity.
-	 * 
+	 *
 	 * @param id the id to set
 	 */
 	protected void setId(final PK id) {
@@ -57,7 +57,7 @@ public abstract class AbstractPersistableCustom<PK extends Serializable> impleme
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.springframework.data.domain.Persistable#isNew()
 	 */
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -68,7 +68,7 @@ public abstract class AbstractPersistableCustom<PK extends Serializable> impleme
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -79,7 +79,7 @@ public abstract class AbstractPersistableCustom<PK extends Serializable> impleme
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -104,7 +104,7 @@ public abstract class AbstractPersistableCustom<PK extends Serializable> impleme
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override

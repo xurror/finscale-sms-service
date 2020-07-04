@@ -18,6 +18,7 @@
  */
 package org.fineract.messagegateway.sms.providers;
 
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.fineract.messagegateway.exception.MessageGatewayException;
@@ -35,11 +36,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import javax.print.URIException;
+
 @Component
 public class SMSProviderFactory implements ApplicationContextAware {
 
 	 private static final Logger logger = LoggerFactory.getLogger(SMSProviderFactory.class);
-	 
+
 	private ApplicationContext applicationContext;
 
 	private final SMSBridgeRepository smsBridgeRepository;
@@ -65,7 +68,7 @@ public class SMSProviderFactory implements ApplicationContextAware {
 		this.applicationContext = applicationContext;
 	}
 
-	public void sendShortMessage(final SMSMessage message) {
+	public void sendShortMessage(final SMSMessage message) throws URISyntaxException {
 		SMSBridge bridge = this.smsBridgeRepository.findByIdAndTenantId(message.getBridgeId(),
 				message.getTenantId());
 		SMSProvider provider = null;
@@ -83,8 +86,8 @@ public class SMSProviderFactory implements ApplicationContextAware {
 			message.setDeliveryStatus(SmsMessageStatusType.FAILED.getValue());
 		}
 	}
-	
-	public void sendShortMessage(final Collection<SMSMessage> messages) {
+
+	public void sendShortMessage(final Collection<SMSMessage> messages) throws URISyntaxException {
 		for(SMSMessage message: messages) {
 			SMSBridge bridge = this.smsBridgeRepository.findByIdAndTenantId(message.getBridgeId(),
 					message.getTenantId());
