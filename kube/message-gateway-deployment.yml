@@ -2,15 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: sms-gateway-server
-    name: sms-gateway-server
+    app: sms-server
+    name: sms-server
 spec:
   ports:
     - protocol: TCP
       port: 9191
       targetPort: 9191
   selector:
-    app: sms-gateway-server
+    app: sms-server
     tier: backend
   type: LoadBalancer
 
@@ -19,24 +19,24 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sms-gateway-server
+  name: sms-server
   labels:
-    app: sms-gateway-server
+    app: sms-server
 spec:
   selector:
     matchLabels:
-      app: sms-gateway-server
+      app: sms-server
       tier: backend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: sms-gateway-server
+        app: sms-server
         tier: backend
     spec:
       containers:
-        - name: sms-gateway-server
+        - name: sms-server
           image: muellners/finscale-sms-service:latest
           env:
             - name: DRIVERCLASS_NAME
@@ -45,34 +45,34 @@ spec:
               value: jdbc
             - name: SUB_PROTOCOL
               value: mysql:thin
-            - name: fineract_tenants_driver
+            - name: mysql_driver
               value: org.drizzle.jdbc.DrizzleDriver
-            - name: fineract_tenants_url
+            - name: mysql_url
               value: jdbc:mysql:thin://fineractmysql:3306/fineract_tenants
-            - name: fineract_tenants_uid
+            - name: message_uid
               valueFrom:
                 secretKeyRef:
-                  name: fineract-tenants-db-secret
+                  name: message-db-secret
                   key: username
-            - name: fineract_tenants_pwd
+            - name: mysql_db_pwd
               valueFrom:
                 secretKeyRef:
-                  name: fineract-tenants-db-secret
+                  name: message-db-secret
                   key: password
-            - name: FINERACT_DEFAULT_TENANTDB_HOSTNAME
-              value: fineractmysql
-            - name: FINERACT_DEFAULT_TENANTDB_PORT
+            - name: MYSQL_HOSTNAME
+              value: messagemysql
+            - name: MYSQL_PORT
               value: '3306'
-            - name: FINERACT_DEFAULT_TENANTDB_UID
+            - name: MYSQL_DB_UID
               valueFrom:
                 secretKeyRef:
-                  name: fineract-tenants-db-secret
+                  name: message-db-secret
                   key: username
-            - name: FINERACT_DEFAULT_TENANTDB_PWD
+            - name: MYSQL_DB_PWD
               valueFrom:
                 secretKeyRef:
-                  name: fineract-tenants-db-secret
+                  name: message-db-secret
                   key: password
           ports:
             - containerPort: 8443
-              name: fineract-server
+              name: sms-server

@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: message-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: messagemysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sms-server
+  name: messagemysql
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  selector:
+    app: sms-server
+    tier: messagemysql
+  clusterIP: None
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sms-server
+  name: messagemysql
+spec:
+  selector:
+    matchLabels:
+      app: sms-server
+      tier: messagemysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sms-server
+        tier: messagemysql
+    spec:
+      containers:
+        - image: mysql:5.7
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: message-db-secret
+                  key: password
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            failureThreshold: 10
+            timeoutSeconds: 10
+          ports:
+            - containerPort: 3306
+              name: messagemysql
+          volumeMounts:
+            - name: messagemysql-persistent-storage
+              mountPath: /var/lib/mysql/
+            - name: messagemysql-initdb
+              mountPath: /docker-entrypoint-initdb.d/
+      volumes:
+        - name: messagemysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: messagemysql-pv-claim
+        - name: messagemysql-initdb
+          configMap:
+            name: messagemysql-initdb
