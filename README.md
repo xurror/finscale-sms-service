@@ -2,6 +2,13 @@
 
 A lot has changed since last time, we upgraded the service in latest spring boot.
 
+
+## Docker deployment 
+
+``docker compose up``
+
+``docker-compose build ``
+
 ## Build set up
 ##### To create standalone application:
   `./gradlew clean build` 
