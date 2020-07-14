@@ -18,8 +18,15 @@ spring:
   datasource:
     url: jdbc:mysql:thin://localhost:3306/messagegateway
     username: root
-    password: skdcnwauicn2ucnaecasdsajdnizucawencascdca
-    driver-class-name: org.drizzle.jdbc.DrizzleDriver
+    password: mysql
+    driverClassName: org.drizzle.jdbc.DrizzleDriver
+  
+  flyway:
+    schemas: messagegateway
+    baseline-on-migrate: true #NEVER CHANGE BASELINE TO TRUE
+    validate-on-migrate: true #true to populate local DB
+    table: schema_version
+    enabled: true
 
 # Status Callback configuration for Twilio. Port will be taken from server configuration
 hostconfig:

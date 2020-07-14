@@ -22,7 +22,7 @@ RUN apt-get update -qq && apt-get install -y wget
 COPY . sms
 WORKDIR /sms
 
-RUN ./gradlew --no-daemon -q  -x test bootJar
+RUN ./gradlew  --no-daemon -q bootJar
 
 WORKDIR /sms/target
 RUN jar -xf /sms/build/libs/message-gateway.jar

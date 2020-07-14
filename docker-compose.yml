@@ -27,7 +27,7 @@ services:
       - ./sms-db/docker:/docker-entrypoint-initdb.d:Z,ro
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: skdcnwauicn2ucnaecasdsajdnizucawencascdca
+      MYSQL_ROOT_PASSWORD: mysql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "--password=skdcnwauicn2ucnaecasdsajdnizucawencascdca" ]
       timeout: 10s
@@ -43,14 +43,8 @@ services:
     depends_on:
       - messagemysql
     environment:
-      - DRIVERCLASS_NAME=org.drizzle.jdbc.DrizzleDriver
-      - PROTOCOL=jdbc
-      - SUB_PROTOCOL=mysql:thin
-      - mysql_driver=org.drizzle.jdbc.DrizzleDriver
-      - mysql_db_url=jdbc:mysql:thin://messagemysql:3306/messagegateway
-      - mysql_db_uid=root
-      - mysql_db_pwd=skdcnwauicn2ucnaecasdsajdnizucawencascdca
-      - MYSQL_HOSTNAME=messagemysql
-      - MYSQL_PORT=3306
-      - MYSQL_DB_UID=root
-      - MYSQL_DB_PWD=skdcnwauicn2ucnaecasdsajdnizucawencascdca
+      spring.datasource.driverClassName: org.drizzle.jdbc.DrizzleDriver
+      spring.datasource.url: jdbc:mysql:thin://messagemysql:3306/messagegateway
+      spring.datasource.username: root
+      spring.datasource.password: mysql 
+      
