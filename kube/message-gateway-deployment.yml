@@ -47,9 +47,9 @@ spec:
               value: mysql:thin
             - name: mysql_driver
               value: org.drizzle.jdbc.DrizzleDriver
-            - name: mysql_url
-              value: jdbc:mysql:thin://fineractmysql:3306/fineract_tenants
-            - name: message_uid
+            - name: mysql_db_url
+              value: jdbc:mysql:thin://messagemysql:3306/messagegateway
+            - name: mysql_db_uid
               valueFrom:
                 secretKeyRef:
                   name: message-db-secret

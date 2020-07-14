@@ -48,9 +48,9 @@ services:
       - SUB_PROTOCOL=mysql:thin
       - mysql_driver=org.drizzle.jdbc.DrizzleDriver
       - mysql_db_url=jdbc:mysql:thin://messagemysql:3306/messagegateway
-      - mysql_db_username_uid=root
+      - mysql_db_uid=root
       - mysql_db_pwd=skdcnwauicn2ucnaecasdsajdnizucawencascdca
-      - DB_HOSTNAME=messagemysql
-      - DB_PORT=3306
-      - DB_UID=root
-      - DB_PWD=skdcnwauicn2ucnaecasdsajdnizucawencascdca
+      - MYSQL_HOSTNAME=messagemysql
+      - MYSQL_PORT=3306
+      - MYSQL_DB_UID=root
+      - MYSQL_DB_PWD=skdcnwauicn2ucnaecasdsajdnizucawencascdca
